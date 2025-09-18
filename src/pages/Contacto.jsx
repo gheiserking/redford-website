@@ -24,34 +24,59 @@ const Contacto = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Crear el email usando mailto (simple y funciona siempre)
-    const subject = `Nuevo contacto REDFORD - ${formData.nombre}`;
-    const body = `
+    // Web3Forms - Envío directo sin mailto
+    const formDataToSend = new FormData();
+    
+    // CAMBIA ESTE ACCESS KEY por el tuyo de web3forms.com
+    formDataToSend.append("access_key", "1d66f10c-e1b4-4129-8537-5eb4bcbe96f2");
+    formDataToSend.append("name", formData.nombre);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("subject", `Nuevo contacto REDFORD - ${formData.nombre}`);
+    formDataToSend.append("message", `
 NUEVO CONTACTO DESDE WEB:
 
 Nombre: ${formData.nombre}
 Email: ${formData.email}
-Empresa: ${formData.empresa}
-Tipo de proyecto: ${formData.proyecto}
-Presupuesto orientativo: ${formData.presupuesto}
+Empresa: ${formData.empresa || 'No especificada'}
+Tipo de proyecto: ${formData.proyecto || 'No especificado'}
+Presupuesto orientativo: ${formData.presupuesto || 'No especificado'}
 
 MENSAJE:
 ${formData.mensaje}
 
 ---
 Enviado desde redford-website
-    `;
+    `);
 
-    const mailtoLink = `mailto:elisademiguel777@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // Abrir el cliente de email
-    window.location.href = mailtoLink;
-    
-    // Simular envío y mostrar confirmación
-    setTimeout(() => {
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formDataToSend
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        // Limpiar formulario
+        setFormData({
+          nombre: '',
+          email: '',
+          empresa: '',
+          proyecto: '',
+          presupuesto: '',
+          mensaje: ''
+        });
+      } else {
+        console.log("Error", data);
+        alert('Error al enviar el mensaje. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al enviar el mensaje. Revisa tu conexión a internet.');
+    } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 1000);
+    }
   };
 
   const resetForm = () => {
@@ -99,7 +124,7 @@ Enviado desde redford-website
                   <CheckCircle size={64} color="#8B0000" style={styles.successIcon} />
                   <h3 style={styles.successTitle}>¡Gracias por contactarnos!</h3>
                   <p style={styles.successText}>
-                    Tu mensaje se ha enviado correctamente. Te responderemos en menos de 48 horas.
+                    Tu mensaje se ha enviado correctamente. Te responderemos en menos de 72 horas.
                   </p>
                   <div style={styles.successButtons}>
                     <button 
@@ -277,7 +302,7 @@ Enviado desde redford-website
                   <Clock size={20} color="#8B0000" />
                   <div>
                     <h4 style={styles.infoCardTitle}>Tiempo de respuesta</h4>
-                    <p style={styles.infoCardText}>Menos de 48 horas</p>
+                    <p style={styles.infoCardText}>Menos de 72 horas</p>
                   </div>
                 </div>
 

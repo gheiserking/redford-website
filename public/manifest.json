@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "REDFORD",
+  "name": "REDFORD - Especialistas en crecimiento digital",
+  "description": "La fuerza que impulsa tu marca. No hacemos ruido. Especialistas en crecimiento digital y estrategias personalizadas.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,34 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#8B0000",
+  "background_color": "#000000",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["business", "marketing", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Contactar",
+      "short_name": "Contacto",
+      "description": "Contacta directamente con REDFORD",
+      "url": "/contacto",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "WhatsApp",
+      "short_name": "WhatsApp", 
+      "description": "Chatea por WhatsApp",
+      "url": "https://wa.me/34644489930",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Instagram",
+      "short_name": "Instagram",
+      "description": "Síguenos en Instagram", 
+      "url": "https://instagram.com/redford_creativ",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ]
 }
