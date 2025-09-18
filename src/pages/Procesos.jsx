@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Procesos = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const steps = [
     {
@@ -58,6 +71,11 @@ const Procesos = () => {
     }
   ];
 
+  // Función para obtener estilos responsivos
+  const getResponsiveStyles = (baseStyles, mobileStyles = {}) => {
+    return isMobile ? { ...baseStyles, ...mobileStyles } : baseStyles;
+  };
+
   const nextStep = () => {
     setCurrentStep((prev) => (prev + 1) % steps.length);
   };
@@ -69,29 +87,29 @@ const Procesos = () => {
   return (
     <div style={styles.container}>
       {/* Hero Section */}
-      <section style={styles.hero}>
+      <section style={getResponsiveStyles(styles.hero, styles.heroMobile)}>
         <div style={styles.heroContent}>
-          <h1 style={styles.heroTitle}>
+          <h1 style={getResponsiveStyles(styles.heroTitle, styles.heroTitleMobile)}>
             Nuestro <span style={styles.highlight}>Proceso</span>
           </h1>
-          <p style={styles.heroSubtitle}>
+          <p style={getResponsiveStyles(styles.heroSubtitle, styles.heroSubtitleMobile)}>
             Metodología probada para impulsar tu marca sin hacer ruido
           </p>
         </div>
       </section>
 
       {/* Proceso Steps Slider */}
-      <section style={styles.section}>
+      <section style={getResponsiveStyles(styles.section, styles.sectionMobile)}>
         <div style={styles.sectionContainer}>
           
           {/* Step Indicators */}
-          <div style={styles.indicators}>
+          <div style={getResponsiveStyles(styles.indicators, styles.indicatorsMobile)}>
             {steps.map((_, index) => (
               <div
                 key={index}
                 style={{
-                  ...styles.indicator,
-                  ...(index === currentStep ? styles.indicatorActive : {})
+                  ...getResponsiveStyles(styles.indicator, styles.indicatorMobile),
+                  ...(index === currentStep ? getResponsiveStyles(styles.indicatorActive, styles.indicatorActiveMobile) : {})
                 }}
                 onClick={() => setCurrentStep(index)}
               />
@@ -100,38 +118,42 @@ const Procesos = () => {
 
           {/* Current Step */}
           <div style={styles.stepContainer}>
-            <div style={styles.step}>
-              <div style={styles.stepContent}>
-                <div style={styles.stepNumber}>{steps[currentStep].number}</div>
+            <div style={getResponsiveStyles(styles.step, styles.stepMobile)}>
+              <div style={getResponsiveStyles(styles.stepContent, styles.stepContentMobile)}>
+                <div style={getResponsiveStyles(styles.stepNumber, styles.stepNumberMobile)}>
+                  {steps[currentStep].number}
+                </div>
                 <div style={styles.stepInfo}>
-                  <h2 style={styles.stepTitle}>{steps[currentStep].title}</h2>
-                  <p style={styles.stepDescription}>
+                  <h2 style={getResponsiveStyles(styles.stepTitle, styles.stepTitleMobile)}>
+                    {steps[currentStep].title}
+                  </h2>
+                  <p style={getResponsiveStyles(styles.stepDescription, styles.stepDescriptionMobile)}>
                     <strong>{steps[currentStep].description.split('.')[0]}.</strong>
                     {steps[currentStep].description.substring(steps[currentStep].description.indexOf('.') + 1)}
                   </p>
                   <div style={styles.stepDetails}>
                     {steps[currentStep].details.map((detail, index) => (
-                      <span key={index} style={styles.detail}>{detail}</span>
+                      <span key={index} style={getResponsiveStyles(styles.detail, styles.detailMobile)}>{detail}</span>
                     ))}
                   </div>
                 </div>
               </div>
-              <div style={styles.stepImage}>
+              <div style={getResponsiveStyles(styles.stepImage, styles.stepImageMobile)}>
                 <img 
                   src={steps[currentStep].image}
                   alt={steps[currentStep].alt}
-                  style={styles.image}
+                  style={getResponsiveStyles(styles.image, styles.imageMobile)}
                 />
               </div>
             </div>
 
             {/* Navigation Arrows */}
-            <div style={styles.navigation}>
-              <button onClick={prevStep} style={styles.navButton}>
-                <span style={styles.arrow}>‹</span>
+            <div style={getResponsiveStyles(styles.navigation, styles.navigationMobile)}>
+              <button onClick={prevStep} style={getResponsiveStyles(styles.navButton, styles.navButtonMobile)}>
+                <ChevronLeft size={isMobile ? 20 : 24} style={styles.arrow} />
               </button>
-              <button onClick={nextStep} style={styles.navButton}>
-                <span style={styles.arrow}>›</span>
+              <button onClick={nextStep} style={getResponsiveStyles(styles.navButton, styles.navButtonMobile)}>
+                <ChevronRight size={isMobile ? 20 : 24} style={styles.arrow} />
               </button>
             </div>
           </div>
@@ -140,13 +162,15 @@ const Procesos = () => {
       </section>
 
       {/* CTA Section */}
-      <section style={styles.ctaSection}>
+      <section style={getResponsiveStyles(styles.ctaSection, styles.ctaSectionMobile)}>
         <div style={styles.ctaContent}>
-          <h2 style={styles.ctaTitle}>¿Listo para ver tu marca crecer?</h2>
-          <p style={styles.ctaSubtitle}>
+          <h2 style={getResponsiveStyles(styles.ctaTitle, styles.ctaTitleMobile)}>
+            ¿Listo para ver tu marca crecer?
+          </h2>
+          <p style={getResponsiveStyles(styles.ctaSubtitle, styles.ctaSubtitleMobile)}>
             Aplicamos este proceso probado a tu proyecto específico
           </p>
-          <a href="/contacto" style={styles.ctaButton}>
+          <a href="/contacto" style={getResponsiveStyles(styles.ctaButton, styles.ctaButtonMobile)}>
             Hablemos de tu proyecto
           </a>
         </div>
@@ -169,6 +193,9 @@ const styles = {
     textAlign: 'center',
     background: 'linear-gradient(135deg, #000000, #1a0000)'
   },
+  heroMobile: {
+    padding: '80px 16px 60px'
+  },
 
   heroContent: {
     maxWidth: '800px',
@@ -181,11 +208,18 @@ const styles = {
     marginBottom: '24px',
     lineHeight: '1.2'
   },
+  heroTitleMobile: {
+    fontSize: '2.5rem',
+    marginBottom: '16px'
+  },
 
   heroSubtitle: {
     fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
     color: '#D1D5DB',
     fontWeight: '300'
+  },
+  heroSubtitleMobile: {
+    fontSize: '1.25rem'
   },
 
   highlight: {
@@ -195,6 +229,9 @@ const styles = {
   // Section
   section: {
     padding: '80px 24px'
+  },
+  sectionMobile: {
+    padding: '60px 16px'
   },
 
   sectionContainer: {
@@ -209,6 +246,10 @@ const styles = {
     gap: '16px',
     marginBottom: '64px'
   },
+  indicatorsMobile: {
+    gap: '12px',
+    marginBottom: '40px'
+  },
 
   indicator: {
     width: '16px',
@@ -218,10 +259,17 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.3s ease'
   },
+  indicatorMobile: {
+    width: '12px',
+    height: '12px'
+  },
 
   indicatorActive: {
     backgroundColor: '#8B0000',
     transform: 'scale(1.2)'
+  },
+  indicatorActiveMobile: {
+    transform: 'scale(1.3)'
   },
 
   // Step Container
@@ -237,15 +285,22 @@ const styles = {
     alignItems: 'center',
     minHeight: '500px'
   },
-
-  stepReverse: {
-    direction: 'rtl'
+  stepMobile: {
+    display: 'block',
+    minHeight: 'auto'
   },
 
   stepContent: {
     display: 'flex',
     alignItems: 'flex-start',
     gap: '32px'
+  },
+  stepContentMobile: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    gap: '20px',
+    marginBottom: '32px'
   },
 
   stepNumber: {
@@ -255,6 +310,10 @@ const styles = {
     lineHeight: '1',
     minWidth: '120px',
     textShadow: '0 0 30px rgba(139, 0, 0, 0.5)'
+  },
+  stepNumberMobile: {
+    fontSize: '4rem',
+    minWidth: 'auto'
   },
 
   stepInfo: {
@@ -267,12 +326,20 @@ const styles = {
     marginBottom: '24px',
     color: '#FFFFFF'
   },
+  stepTitleMobile: {
+    fontSize: '2rem',
+    marginBottom: '16px'
+  },
 
   stepDescription: {
     fontSize: '1.25rem',
     lineHeight: '1.8',
     color: '#D1D5DB',
     marginBottom: '32px'
+  },
+  stepDescriptionMobile: {
+    fontSize: '1.1rem',
+    marginBottom: '24px'
   },
 
   stepDetails: {
@@ -286,11 +353,17 @@ const styles = {
     fontSize: '1rem',
     fontWeight: '500'
   },
+  detailMobile: {
+    fontSize: '0.95rem'
+  },
 
   stepImage: {
     borderRadius: '16px',
     overflow: 'hidden',
     boxShadow: '0 20px 40px rgba(139, 0, 0, 0.3)'
+  },
+  stepImageMobile: {
+    marginBottom: '32px'
   },
 
   image: {
@@ -299,6 +372,9 @@ const styles = {
     objectFit: 'cover',
     filter: 'contrast(1.2) brightness(0.9)',
     transition: 'all 0.3s ease'
+  },
+  imageMobile: {
+    height: '300px'
   },
 
   // Navigation
@@ -313,6 +389,13 @@ const styles = {
     transform: 'translateY(-50%)',
     pointerEvents: 'none'
   },
+  navigationMobile: {
+    position: 'static',
+    justifyContent: 'center',
+    gap: '24px',
+    marginTop: '20px',
+    transform: 'none'
+  },
 
   navButton: {
     backgroundColor: '#8B0000',
@@ -326,13 +409,18 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     boxShadow: '0 10px 30px rgba(139, 0, 0, 0.3)',
-    pointerEvents: 'all'
+    pointerEvents: 'all',
+    backdropFilter: 'blur(10px)'
+  },
+  navButtonMobile: {
+    width: '50px',
+    height: '50px',
+    boxShadow: '0 8px 25px rgba(139, 0, 0, 0.4)'
   },
 
   arrow: {
     color: 'white',
-    fontSize: '2rem',
-    fontWeight: 'bold'
+    transition: 'all 0.3s ease'
   },
 
   // CTA Section
@@ -340,6 +428,9 @@ const styles = {
     padding: '100px 24px',
     background: 'linear-gradient(135deg, #1a0000, #000000)',
     textAlign: 'center'
+  },
+  ctaSectionMobile: {
+    padding: '80px 16px'
   },
 
   ctaContent: {
@@ -353,11 +444,19 @@ const styles = {
     marginBottom: '24px',
     color: '#8B0000'
   },
+  ctaTitleMobile: {
+    fontSize: '2rem',
+    marginBottom: '16px'
+  },
 
   ctaSubtitle: {
     fontSize: '1.25rem',
     color: '#D1D5DB',
     marginBottom: '40px'
+  },
+  ctaSubtitleMobile: {
+    fontSize: '1.1rem',
+    marginBottom: '32px'
   },
 
   ctaButton: {
@@ -374,41 +473,11 @@ const styles = {
     textDecoration: 'none',
     display: 'inline-block'
   },
-
-  // Responsive
-  '@media (max-width: 768px)': {
-    step: {
-      gridTemplateColumns: '1fr',
-      gap: '48px',
-      textAlign: 'center'
-    },
-
-    stepContent: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      textAlign: 'center'
-    },
-
-    stepNumber: {
-      fontSize: '4rem',
-      minWidth: 'auto'
-    },
-
-    stepTitle: {
-      fontSize: '2rem'
-    },
-
-    image: {
-      height: '300px'
-    },
-
-    navigation: {
-      position: 'static',
-      justifyContent: 'center',
-      gap: '24px',
-      marginTop: '32px',
-      transform: 'none'
-    }
+  ctaButtonMobile: {
+    padding: '14px 32px',
+    fontSize: '1rem',
+    width: '100%',
+    maxWidth: '280px'
   }
 };
 

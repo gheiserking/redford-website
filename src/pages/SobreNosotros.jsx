@@ -18,10 +18,10 @@ const SobreNosotros = () => {
       {/* Nuestra Historia */}
       <section style={styles.section}>
         <div style={styles.sectionContainer}>
-          <div style={styles.storyGrid}>
+          <div style={window.innerWidth <= 768 ? styles.storyGridMobile : styles.storyGrid}>
             {/* Imagen del equipo */}
             <div style={styles.imageContainer}>
-              <div style={styles.teamImage}>
+              <div style={window.innerWidth <= 768 ? styles.teamImageMobile : styles.teamImage}>
                 <img 
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                   alt="Equipo REDFORD trabajando"
@@ -31,7 +31,7 @@ const SobreNosotros = () => {
             </div>
             
             {/* Historia */}
-            <div style={styles.storyContent}>
+            <div style={window.innerWidth <= 768 ? styles.storyContentMobile : styles.storyContent}>
               <h2 style={styles.sectionTitle}>Nuestra historia</h2>
               <div style={styles.storyText}>
                 <p style={styles.paragraph}>
@@ -72,7 +72,7 @@ const styles = {
 
   // Hero
   hero: {
-    padding: '120px 24px 80px',
+    padding: window.innerWidth <= 768 ? '80px 24px 60px' : '120px 24px 80px',
     textAlign: 'center',
     background: 'linear-gradient(135deg, #000000, #1a0000)'
   },
@@ -101,7 +101,7 @@ const styles = {
 
   // Section
   section: {
-    padding: '80px 24px'
+    padding: window.innerWidth <= 768 ? '60px 24px' : '80px 24px'
   },
 
   sectionContainer: {
@@ -112,16 +112,24 @@ const styles = {
   sectionTitle: {
     fontSize: 'clamp(2rem, 6vw, 2.5rem)',
     fontWeight: 'bold',
-    marginBottom: '48px',
+    marginBottom: window.innerWidth <= 768 ? '32px' : '48px',
     color: '#8B0000'
   },
 
-  // Historia
+  // Historia Desktop
   storyGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 2fr',
     gap: '64px',
     alignItems: 'center'
+  },
+
+  // Historia Mobile
+  storyGridMobile: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '48px',
+    textAlign: 'center'
   },
 
   imageContainer: {
@@ -132,6 +140,15 @@ const styles = {
   teamImage: {
     width: '100%',
     maxWidth: '400px',
+    aspectRatio: '4/3',
+    borderRadius: '16px',
+    overflow: 'hidden',
+    boxShadow: '0 20px 40px rgba(139, 0, 0, 0.3)'
+  },
+
+  teamImageMobile: {
+    width: '100%',
+    maxWidth: '300px',
     aspectRatio: '4/3',
     borderRadius: '16px',
     overflow: 'hidden',
@@ -150,43 +167,30 @@ const styles = {
     paddingLeft: '32px'
   },
 
+  storyContentMobile: {
+    paddingLeft: '0'
+  },
+
   storyText: {
-    fontSize: '18px',
+    fontSize: window.innerWidth <= 768 ? '16px' : '18px',
     lineHeight: '1.8'
   },
 
   paragraph: {
-    marginBottom: '28px',
+    marginBottom: window.innerWidth <= 768 ? '24px' : '28px',
     color: '#D1D5DB'
   },
 
   paragraphHighlight: {
-    marginBottom: '28px',
+    marginBottom: window.innerWidth <= 768 ? '24px' : '28px',
     color: '#8B0000',
     fontWeight: '600',
-    fontSize: '20px',
-    padding: '32px',
+    fontSize: window.innerWidth <= 768 ? '18px' : '20px',
+    padding: window.innerWidth <= 768 ? '24px 20px' : '32px',
     background: 'rgba(139, 0, 0, 0.1)',
     borderLeft: '4px solid #8B0000',
     borderRadius: '8px',
     fontStyle: 'italic'
-  },
-
-  // Responsive
-  '@media (max-width: 768px)': {
-    storyGrid: {
-      gridTemplateColumns: '1fr',
-      gap: '48px',
-      textAlign: 'center'
-    },
-    
-    storyContent: {
-      paddingLeft: '0'
-    },
-    
-    teamImage: {
-      maxWidth: '300px'
-    }
   }
 };
 

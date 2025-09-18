@@ -17,8 +17,11 @@ const Header = () => {
 
   const styles = {
     header: {
-      position: 'relative',
-      zIndex: 10,
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1000,
       padding: '20px 0',
       backgroundColor: 'rgba(0, 0, 0, 0.95)',
       backdropFilter: 'blur(20px)',
@@ -115,7 +118,7 @@ const Header = () => {
     
     // Mobile menu
     mobileMenu: {
-      position: 'absolute',
+      position: 'fixed',
       top: '100%',
       left: 0,
       right: 0,
@@ -123,11 +126,26 @@ const Header = () => {
       backdropFilter: 'blur(30px)',
       border: '1px solid rgba(0, 212, 255, 0.2)',
       borderTop: 'none',
-      zIndex: 20,
+      zIndex: 999,
       transform: isMenuOpen ? 'translateY(0)' : 'translateY(-100%)',
       opacity: isMenuOpen ? 1 : 0,
       visibility: isMenuOpen ? 'visible' : 'hidden',
-      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+      height: '100vh'
+    },
+    
+    mobileMenuOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      backdropFilter: 'blur(8px)',
+      zIndex: 900,
+      opacity: isMenuOpen ? 1 : 0,
+      visibility: isMenuOpen ? 'visible' : 'hidden',
+      transition: 'all 0.3s ease'
     },
     
     mobileMenuContent: {
@@ -228,6 +246,9 @@ const Header = () => {
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMenuOpen && <div style={styles.mobileMenuOverlay} onClick={() => setIsMenuOpen(false)}></div>}
 
         {/* Mobile Menu */}
         <div style={styles.mobileMenu}>

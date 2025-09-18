@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, TrendingUp, Users, Calendar, Lightbulb } from 'lucide-react';
 
 const services = [
@@ -54,62 +54,81 @@ const services = [
 
 const Servicios = () => {
   const [activeService, setActiveService] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Función para obtener estilos responsivos
+  const getResponsiveStyles = (baseStyles, mobileStyles = {}) => {
+    return isMobile ? { ...baseStyles, ...mobileStyles } : baseStyles;
+  };
 
   return (
     <div style={styles.container}>
       {/* Hero Section */}
-      <section style={styles.hero}>
+      <section style={getResponsiveStyles(styles.hero, styles.heroMobile)}>
         <div style={styles.heroContent}>
-          <h1 style={styles.heroTitle}>
+          <h1 style={getResponsiveStyles(styles.heroTitle, styles.heroTitleMobile)}>
             Servicios que <span style={styles.highlight}>funcionan</span>
           </h1>
-          <p style={styles.heroSubtitle}>
+          <p style={getResponsiveStyles(styles.heroSubtitle, styles.heroSubtitleMobile)}>
             Sin ruido. Sin promesas vacías. Solo resultados que hablan por sí solos.
           </p>
         </div>
       </section>
 
       {/* Services Navigation */}
-      <section style={styles.section}>
+      <section style={getResponsiveStyles(styles.section, styles.sectionMobile)}>
         <div style={styles.sectionContainer}>
           {/* Tabs Navigation */}
-          <div style={styles.tabsContainer}>
+          <div style={getResponsiveStyles(styles.tabsContainer, styles.tabsContainerMobile)}>
             {services.map((service, index) => (
               <button
                 key={service.id}
                 onClick={() => setActiveService(index)}
                 style={{
-                  ...styles.tab,
+                  ...getResponsiveStyles(styles.tab, styles.tabMobile),
                   ...(activeService === index ? styles.tabActive : {})
                 }}
               >
                 <span style={styles.tabIcon}>
                   {service.icon}
                 </span>
-                {service.title}
+                <span style={getResponsiveStyles({}, styles.tabTextMobile)}>
+                  {service.title}
+                </span>
               </button>
             ))}
           </div>
 
           {/* Active Service Content */}
-          <div style={styles.serviceCard}>
-            <div style={styles.serviceHeader}>
+          <div style={getResponsiveStyles(styles.serviceCard, styles.serviceCardMobile)}>
+            <div style={getResponsiveStyles(styles.serviceHeader, styles.serviceHeaderMobile)}>
               <div style={styles.serviceIconContainer}>
                 {services[activeService].icon}
               </div>
               <div>
-                <h2 style={styles.serviceTitle}>
+                <h2 style={getResponsiveStyles(styles.serviceTitle, styles.serviceTitleMobile)}>
                   {services[activeService].title}
                 </h2>
-                <p style={styles.serviceSubtitle}>
+                <p style={getResponsiveStyles(styles.serviceSubtitle, styles.serviceSubtitleMobile)}>
                   {services[activeService].subtitle}
                 </p>
               </div>
             </div>
 
-            <div style={styles.serviceContent}>
-              <div style={styles.serviceDescription}>
-                <p style={styles.descriptionText}>
+            <div style={getResponsiveStyles(styles.serviceContent, styles.serviceContentMobile)}>
+              <div style={getResponsiveStyles(styles.serviceDescription, styles.serviceDescriptionMobile)}>
+                <p style={getResponsiveStyles(styles.descriptionText, styles.descriptionTextMobile)}>
                   {services[activeService].description}
                 </p>
                 
@@ -117,7 +136,7 @@ const Servicios = () => {
                   <h3 style={styles.featuresTitle}>¿Qué incluye?</h3>
                   <ul style={styles.featuresList}>
                     {services[activeService].features.map((feature, idx) => (
-                      <li key={idx} style={styles.featureItem}>
+                      <li key={idx} style={getResponsiveStyles(styles.featureItem, styles.featureItemMobile)}>
                         <span style={styles.featureBullet}></span>
                         {feature}
                       </li>
@@ -125,20 +144,22 @@ const Servicios = () => {
                   </ul>
                 </div>
 
-                <a href="/contacto" style={styles.ctaButton}>
+                <a href="/contacto" style={getResponsiveStyles(styles.ctaButton, styles.ctaButtonMobile)}>
                   <span>Empezar conversación</span>
                   <ArrowRight size={18} />
                 </a>
               </div>
 
               {/* Visual Element */}
-              <div style={styles.visualContainer}>
-                <div style={styles.visualCard}>
+              <div style={getResponsiveStyles(styles.visualContainer, styles.visualContainerMobile)}>
+                <div style={getResponsiveStyles(styles.visualCard, styles.visualCardMobile)}>
                   {activeService === 0 && (
                     <div style={styles.mockup}>
                       <div style={styles.mockupHeader}>
                         <div style={styles.mockupDots}>
-                          <span></span><span></span><span></span>
+                          <span style={styles.mockupDot}></span>
+                          <span style={styles.mockupDot}></span>
+                          <span style={styles.mockupDot}></span>
                         </div>
                       </div>
                       <div style={styles.mockupContent}>
@@ -192,13 +213,13 @@ const Servicios = () => {
                         </div>
                         <div style={styles.reportMetrics}>
                           <div style={styles.metric}>
-                            <span>SEO Social</span>
+                            <span style={styles.metricLabel}>SEO Social</span>
                             <div style={styles.metricBar}>
                               <div style={{...styles.metricFill, width: '85%'}}></div>
                             </div>
                           </div>
                           <div style={styles.metric}>
-                            <span>Engagement</span>
+                            <span style={styles.metricLabel}>Engagement</span>
                             <div style={styles.metricBar}>
                               <div style={{...styles.metricFill, width: '60%'}}></div>
                             </div>
@@ -213,14 +234,14 @@ const Servicios = () => {
           </div>
 
           {/* Bottom CTA */}
-          <div style={styles.bottomCTA}>
-            <h3 style={styles.ctaTitle}>
+          <div style={getResponsiveStyles(styles.bottomCTA, styles.bottomCTAMobile)}>
+            <h3 style={getResponsiveStyles(styles.ctaTitle, styles.ctaTitleMobile)}>
               Cada proyecto es único
             </h3>
-            <p style={styles.ctaDescription}>
+            <p style={getResponsiveStyles(styles.ctaDescription, styles.ctaDescriptionMobile)}>
               No hay soluciones genéricas. Solo estrategias diseñadas específicamente para tu realidad.
             </p>
-            <a href="/contacto" style={styles.finalCTA}>
+            <a href="/contacto" style={getResponsiveStyles(styles.finalCTA, styles.finalCTAMobile)}>
               <span>Hablemos de tu proyecto</span>
               <ArrowRight size={18} />
             </a>
@@ -245,6 +266,9 @@ const styles = {
     textAlign: 'center',
     background: 'linear-gradient(135deg, #000000, #1a0000)'
   },
+  heroMobile: {
+    padding: '80px 16px 60px'
+  },
 
   heroContent: {
     maxWidth: '800px',
@@ -257,11 +281,18 @@ const styles = {
     marginBottom: '24px',
     lineHeight: '1.2'
   },
+  heroTitleMobile: {
+    fontSize: '2.5rem',
+    marginBottom: '16px'
+  },
 
   heroSubtitle: {
     fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
     color: '#D1D5DB',
     fontWeight: '300'
+  },
+  heroSubtitleMobile: {
+    fontSize: '1.25rem'
   },
 
   highlight: {
@@ -271,6 +302,9 @@ const styles = {
   // Section
   section: {
     padding: '80px 24px'
+  },
+  sectionMobile: {
+    padding: '60px 16px'
   },
 
   sectionContainer: {
@@ -285,6 +319,12 @@ const styles = {
     gap: '8px',
     marginBottom: '64px',
     flexWrap: 'wrap'
+  },
+  tabsContainerMobile: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '12px',
+    marginBottom: '40px'
   },
 
   tab: {
@@ -302,6 +342,12 @@ const styles = {
     transition: 'all 0.3s ease',
     backdropFilter: 'blur(10px)'
   },
+  tabMobile: {
+    width: '100%',
+    maxWidth: '300px',
+    justifyContent: 'flex-start',
+    padding: '16px 20px'
+  },
 
   tabActive: {
     background: 'rgba(139, 0, 0, 0.15)',
@@ -313,6 +359,10 @@ const styles = {
     opacity: 0.8
   },
 
+  tabTextMobile: {
+    display: 'block'
+  },
+
   // Service Card
   serviceCard: {
     background: 'rgba(255, 255, 255, 0.02)',
@@ -322,12 +372,22 @@ const styles = {
     marginBottom: '64px',
     backdropFilter: 'blur(10px)'
   },
+  serviceCardMobile: {
+    padding: '24px',
+    marginBottom: '40px'
+  },
 
   serviceHeader: {
     display: 'flex',
     alignItems: 'center',
     gap: '20px',
     marginBottom: '32px'
+  },
+  serviceHeaderMobile: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '16px',
+    marginBottom: '24px'
   },
 
   serviceIconContainer: {
@@ -346,12 +406,18 @@ const styles = {
     fontWeight: 'bold',
     margin: '0 0 8px 0'
   },
+  serviceTitleMobile: {
+    fontSize: '1.5rem'
+  },
 
   serviceSubtitle: {
     fontSize: '1.1rem',
     color: '#8B0000',
     margin: 0,
     fontStyle: 'italic'
+  },
+  serviceSubtitleMobile: {
+    fontSize: '1rem'
   },
 
   serviceContent: {
@@ -360,9 +426,16 @@ const styles = {
     gap: '48px',
     alignItems: 'start'
   },
+  serviceContentMobile: {
+    display: 'block'
+  },
 
   serviceDescription: {
     paddingRight: '32px'
+  },
+  serviceDescriptionMobile: {
+    paddingRight: '0',
+    marginBottom: '32px'
   },
 
   descriptionText: {
@@ -370,6 +443,10 @@ const styles = {
     lineHeight: '1.7',
     color: '#D1D5DB',
     marginBottom: '32px'
+  },
+  descriptionTextMobile: {
+    fontSize: '16px',
+    marginBottom: '24px'
   },
 
   featuresContainer: {
@@ -398,6 +475,9 @@ const styles = {
     fontSize: '16px',
     lineHeight: '1.5'
   },
+  featureItemMobile: {
+    fontSize: '15px'
+  },
 
   featureBullet: {
     width: '6px',
@@ -423,16 +503,26 @@ const styles = {
     border: 'none',
     cursor: 'pointer'
   },
+  ctaButtonMobile: {
+    width: '100%',
+    justifyContent: 'center'
+  },
 
   // Visual Container
   visualContainer: {
     display: 'flex',
     justifyContent: 'center'
   },
+  visualContainerMobile: {
+    marginTop: '0'
+  },
 
   visualCard: {
     width: '100%',
     maxWidth: '300px'
+  },
+  visualCardMobile: {
+    maxWidth: '100%'
   },
 
   mockup: {
@@ -455,16 +545,12 @@ const styles = {
     gap: '6px'
   },
 
-  mockupDots: {
-    display: 'flex',
-    gap: '6px'
-  },
-
-  'mockupDots span': {
+  mockupDot: {
     width: '8px',
     height: '8px',
     borderRadius: '50%',
-    background: 'rgba(255, 255, 255, 0.3)'
+    background: 'rgba(255, 255, 255, 0.3)',
+    display: 'block'
   },
 
   mockupContent: {
@@ -596,7 +682,7 @@ const styles = {
     textAlign: 'left'
   },
 
-  'metric span': {
+  metricLabel: {
     fontSize: '12px',
     color: 'rgba(255, 255, 255, 0.8)',
     display: 'block',
@@ -626,11 +712,17 @@ const styles = {
     borderRadius: '16px',
     backdropFilter: 'blur(10px)'
   },
+  bottomCTAMobile: {
+    padding: '32px 20px'
+  },
 
   ctaTitle: {
     fontSize: '1.8rem',
     fontWeight: 'bold',
     marginBottom: '16px'
+  },
+  ctaTitleMobile: {
+    fontSize: '1.5rem'
   },
 
   ctaDescription: {
@@ -640,6 +732,10 @@ const styles = {
     maxWidth: '500px',
     margin: '0 auto 24px auto',
     lineHeight: '1.6'
+  },
+  ctaDescriptionMobile: {
+    fontSize: '15px',
+    margin: '0 0 24px 0'
   },
 
   finalCTA: {
@@ -655,26 +751,9 @@ const styles = {
     fontWeight: '500',
     transition: 'all 0.3s ease'
   },
-
-  // Responsive
-  '@media (max-width: 768px)': {
-    serviceContent: {
-      gridTemplateColumns: '1fr',
-      gap: '32px'
-    },
-    
-    serviceDescription: {
-      paddingRight: '0'
-    },
-    
-    serviceCard: {
-      padding: '32px 24px'
-    },
-    
-    tabsContainer: {
-      flexDirection: 'column',
-      alignItems: 'center'
-    }
+  finalCTAMobile: {
+    width: '100%',
+    justifyContent: 'center'
   }
 };
 

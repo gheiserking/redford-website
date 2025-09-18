@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Instagram, Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Instagram, Phone, Mail, MapPin, Clock, Send, ArrowLeft, CheckCircle } from 'lucide-react';
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -51,26 +51,27 @@ Enviado desde redford-website
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-      
-      // Reset form después de 3 segundos
-      setTimeout(() => {
-        setFormData({
-          nombre: '',
-          email: '',
-          empresa: '',
-          proyecto: '',
-          presupuesto: '',
-          mensaje: ''
-        });
-        setSubmitted(false);
-      }, 3000);
     }, 1000);
   };
+
+  const resetForm = () => {
+    setFormData({
+      nombre: '',
+      email: '',
+      empresa: '',
+      proyecto: '',
+      presupuesto: '',
+      mensaje: ''
+    });
+    setSubmitted(false);
+  };
+
+  const isMobile = window.innerWidth <= 768;
 
   return (
     <div style={styles.container}>
       {/* Hero Section */}
-      <section style={styles.hero}>
+      <section style={isMobile ? styles.heroMobile : styles.hero}>
         <div style={styles.heroContent}>
           <h1 style={styles.heroTitle}>
             ¿Hablamos<span style={styles.highlight}>?</span>
@@ -82,12 +83,12 @@ Enviado desde redford-website
       </section>
 
       {/* Contenido principal */}
-      <section style={styles.section}>
+      <section style={isMobile ? styles.sectionMobile : styles.section}>
         <div style={styles.sectionContainer}>
-          <div style={styles.contactGrid}>
+          <div style={isMobile ? styles.contactGridMobile : styles.contactGrid}>
             
             {/* Formulario */}
-            <div style={styles.formContainer}>
+            <div style={isMobile ? styles.formContainerMobile : styles.formContainer}>
               <h2 style={styles.formTitle}>Cuéntanos tu proyecto</h2>
               <p style={styles.formSubtitle}>
                 Cada proyecto es único. Cuéntanos qué necesitas y te haremos una propuesta personalizada.
@@ -95,13 +96,24 @@ Enviado desde redford-website
 
               {submitted ? (
                 <div style={styles.successMessage}>
-                  <div style={styles.successIcon}>✓</div>
-                  <h3>¡Mensaje enviado!</h3>
-                  <p>Te responderemos en menos de 48 horas.</p>
+                  <CheckCircle size={64} color="#8B0000" style={styles.successIcon} />
+                  <h3 style={styles.successTitle}>¡Gracias por contactarnos!</h3>
+                  <p style={styles.successText}>
+                    Tu mensaje se ha enviado correctamente. Te responderemos en menos de 48 horas.
+                  </p>
+                  <div style={styles.successButtons}>
+                    <button 
+                      onClick={resetForm}
+                      style={styles.backButton}
+                    >
+                      <ArrowLeft size={20} />
+                      Enviar otro mensaje
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} style={styles.form}>
-                  <div style={styles.formRow}>
+                <div style={styles.form}>
+                  <div style={isMobile ? styles.formRowMobile : styles.formRow}>
                     <div style={styles.inputGroup}>
                       <label style={styles.label}>Nombre *</label>
                       <input
@@ -141,7 +153,7 @@ Enviado desde redford-website
                     />
                   </div>
 
-                  <div style={styles.formRow}>
+                  <div style={isMobile ? styles.formRowMobile : styles.formRow}>
                     <div style={styles.inputGroup}>
                       <label style={styles.label}>Tipo de proyecto</label>
                       <select
@@ -192,7 +204,7 @@ Enviado desde redford-website
                   </div>
 
                   <button 
-                    type="submit" 
+                    onClick={handleSubmit}
                     disabled={isSubmitting}
                     style={{
                       ...styles.submitButton,
@@ -208,7 +220,7 @@ Enviado desde redford-website
                       </>
                     )}
                   </button>
-                </form>
+                </div>
               )}
             </div>
 
@@ -226,9 +238,9 @@ Enviado desde redford-website
                 >
                   <Phone size={24} color="#25D366" />
                   <div>
-                    <h4>WhatsApp</h4>
-                    <p>+34 644 48 99 30</p>
-                    <span>Respuesta inmediata</span>
+                    <h4 style={styles.contactMethodTitle}>WhatsApp</h4>
+                    <p style={styles.contactMethodText}>+34 644 48 99 30</p>
+                    <span style={styles.contactMethodSubtext}>Respuesta inmediata</span>
                   </div>
                 </a>
 
@@ -240,9 +252,9 @@ Enviado desde redford-website
                 >
                   <Instagram size={24} color="#E4405F" />
                   <div>
-                    <h4>Instagram</h4>
-                    <p>@redford_creativ</p>
-                    <span>DM siempre abierto</span>
+                    <h4 style={styles.contactMethodTitle}>Instagram</h4>
+                    <p style={styles.contactMethodText}>@redford_creativ</p>
+                    <span style={styles.contactMethodSubtext}>DM siempre abierto</span>
                   </div>
                 </a>
 
@@ -252,9 +264,9 @@ Enviado desde redford-website
                 >
                   <Mail size={24} color="#8B0000" />
                   <div>
-                    <h4>Email directo</h4>
-                    <p>elisademiguel777@gmail.com</p>
-                    <span>Para proyectos formales</span>
+                    <h4 style={styles.contactMethodTitle}>Email directo</h4>
+                    <p style={styles.contactMethodText}>elisademiguel777@gmail.com</p>
+                    <span style={styles.contactMethodSubtext}>Para proyectos formales</span>
                   </div>
                 </a>
 
@@ -264,27 +276,27 @@ Enviado desde redford-website
                 <div style={styles.infoCard}>
                   <Clock size={20} color="#8B0000" />
                   <div>
-                    <h4>Tiempo de respuesta</h4>
-                    <p>Menos de 48 horas</p>
+                    <h4 style={styles.infoCardTitle}>Tiempo de respuesta</h4>
+                    <p style={styles.infoCardText}>Menos de 48 horas</p>
                   </div>
                 </div>
 
                 <div style={styles.infoCard}>
                   <MapPin size={20} color="#8B0000" />
                   <div>
-                    <h4>Ubicación</h4>
-                    <p>España (remoto)</p>
+                    <h4 style={styles.infoCardTitle}>Ubicación</h4>
+                    <p style={styles.infoCardText}>España (remoto)</p>
                   </div>
                 </div>
               </div>
 
               <div style={styles.note}>
-                <h4>Antes de contactar:</h4>
-                <ul>
-                  <li>Ten claro qué quieres conseguir</li>
-                  <li>Prepara info sobre tu marca actual</li>
-                  <li>Define tu presupuesto aproximado</li>
-                  <li>Piensa en tus objetivos a 3-6 meses</li>
+                <h4 style={styles.noteTitle}>Antes de contactar:</h4>
+                <ul style={styles.noteList}>
+                  <li style={styles.noteItem}>Ten claro qué quieres conseguir</li>
+                  <li style={styles.noteItem}>Prepara info sobre tu marca actual</li>
+                  <li style={styles.noteItem}>Define tu presupuesto aproximado</li>
+                  <li style={styles.noteItem}>Piensa en tus objetivos a 3-6 meses</li>
                 </ul>
               </div>
             </div>
@@ -304,9 +316,16 @@ const styles = {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
   },
 
-  // Hero
+  // Hero Desktop
   hero: {
     padding: '120px 24px 80px',
+    textAlign: 'center',
+    background: 'linear-gradient(135deg, #000000, #1a0000)'
+  },
+
+  // Hero Mobile
+  heroMobile: {
+    padding: '80px 24px 60px',
     textAlign: 'center',
     background: 'linear-gradient(135deg, #000000, #1a0000)'
   },
@@ -333,9 +352,14 @@ const styles = {
     color: '#8B0000'
   },
 
-  // Section
+  // Section Desktop
   section: {
     padding: '80px 24px'
+  },
+
+  // Section Mobile
+  sectionMobile: {
+    padding: '60px 24px'
   },
 
   sectionContainer: {
@@ -343,13 +367,21 @@ const styles = {
     margin: '0 auto'
   },
 
+  // Grid Desktop
   contactGrid: {
     display: 'grid',
     gridTemplateColumns: '2fr 1fr',
     gap: '80px'
   },
 
-  // Formulario
+  // Grid Mobile
+  contactGridMobile: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '40px'
+  },
+
+  // Formulario Desktop
   formContainer: {
     background: 'rgba(17, 24, 39, 0.3)',
     padding: '48px',
@@ -357,8 +389,16 @@ const styles = {
     border: '1px solid rgba(139, 0, 0, 0.3)'
   },
 
+  // Formulario Mobile
+  formContainerMobile: {
+    background: 'rgba(17, 24, 39, 0.3)',
+    padding: '32px 24px',
+    borderRadius: '16px',
+    border: '1px solid rgba(139, 0, 0, 0.3)'
+  },
+
   formTitle: {
-    fontSize: '28px',
+    fontSize: window.innerWidth <= 768 ? '24px' : '28px',
     fontWeight: 'bold',
     marginBottom: '16px',
     color: '#8B0000'
@@ -377,10 +417,18 @@ const styles = {
     gap: '24px'
   },
 
+  // Form Row Desktop
   formRow: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: '20px'
+  },
+
+  // Form Row Mobile
+  formRowMobile: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px'
   },
 
   inputGroup: {
@@ -449,15 +497,51 @@ const styles = {
     cursor: 'not-allowed'
   },
 
+  // Success Message
   successMessage: {
     textAlign: 'center',
-    padding: '48px',
-    color: '#8B0000'
+    padding: '48px 24px',
+    background: 'rgba(139, 0, 0, 0.05)',
+    borderRadius: '12px',
+    border: '1px solid rgba(139, 0, 0, 0.2)'
   },
 
   successIcon: {
-    fontSize: '48px',
+    marginBottom: '24px'
+  },
+
+  successTitle: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    color: '#8B0000',
     marginBottom: '16px'
+  },
+
+  successText: {
+    fontSize: '16px',
+    color: '#D1D5DB',
+    marginBottom: '32px',
+    lineHeight: '1.6'
+  },
+
+  successButtons: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+
+  backButton: {
+    background: 'transparent',
+    color: '#8B0000',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    border: '1px solid #8B0000',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    transition: 'all 0.3s ease'
   },
 
   // Contact Info
@@ -468,7 +552,7 @@ const styles = {
   },
 
   contactTitle: {
-    fontSize: '24px',
+    fontSize: window.innerWidth <= 768 ? '20px' : '24px',
     fontWeight: 'bold',
     color: '#8B0000',
     marginBottom: '8px'
@@ -493,6 +577,24 @@ const styles = {
     transition: 'all 0.3s ease'
   },
 
+  contactMethodTitle: {
+    fontSize: '16px',
+    fontWeight: '600',
+    margin: '0 0 4px 0',
+    color: 'white'
+  },
+
+  contactMethodText: {
+    fontSize: '14px',
+    margin: '0 0 4px 0',
+    color: '#D1D5DB'
+  },
+
+  contactMethodSubtext: {
+    fontSize: '12px',
+    color: '#9CA3AF'
+  },
+
   infoCards: {
     display: 'flex',
     flexDirection: 'column',
@@ -509,6 +611,19 @@ const styles = {
     border: '1px solid rgba(139, 0, 0, 0.3)'
   },
 
+  infoCardTitle: {
+    fontSize: '14px',
+    fontWeight: '600',
+    margin: '0 0 4px 0',
+    color: 'white'
+  },
+
+  infoCardText: {
+    fontSize: '14px',
+    margin: '0',
+    color: '#D1D5DB'
+  },
+
   note: {
     background: 'rgba(139, 0, 0, 0.05)',
     padding: '24px',
@@ -516,21 +631,22 @@ const styles = {
     border: '1px solid rgba(139, 0, 0, 0.2)'
   },
 
-  // Responsive
-  '@media (max-width: 768px)': {
-    contactGrid: {
-      gridTemplateColumns: '1fr',
-      gap: '40px'
-    },
-    
-    formContainer: {
-      padding: '32px 24px'
-    },
-    
-    formRow: {
-      gridTemplateColumns: '1fr',
-      gap: '16px'
-    }
+  noteTitle: {
+    fontSize: '16px',
+    fontWeight: '600',
+    marginBottom: '16px',
+    color: '#8B0000'
+  },
+
+  noteList: {
+    margin: '0',
+    paddingLeft: '20px'
+  },
+
+  noteItem: {
+    marginBottom: '8px',
+    color: '#D1D5DB',
+    fontSize: '14px'
   }
 };
 
